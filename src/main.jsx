@@ -5,6 +5,9 @@ import App from './App.jsx'
 import './App.css'
 import Signup from './Signup.jsx';
 import Principal from './Principal.jsx';
+import Mydata from './Mydata.jsx';
+import Guest from './Guest.jsx';
+import Questions from './Questions.jsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,18 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Principal />
+  },
+  {
+    path: "/myData",
+    element: <Mydata />
+  },
+  {
+    path: "/guest",
+    element: <Guest />
+  },
+  {
+    path: "/questions",
+    element: <Questions />
   }
 ]);
 

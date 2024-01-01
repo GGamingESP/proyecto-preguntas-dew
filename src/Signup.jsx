@@ -38,7 +38,9 @@ function Signup() {
             }else{
                 let newUser = {
                     name: userData.user,
-                    password: userData.password
+                    password: userData.password,
+                    favQuestions : [], // ids de las preguntas favoritas
+                    avgScore: [] // hacer division entre cantidad de notas para sacar el promedio
                 }
                 oldValues.push(newUser);
                 localStorage.setItem("users", JSON.stringify(oldValues));

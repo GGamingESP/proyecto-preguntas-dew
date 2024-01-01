@@ -41,12 +41,10 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
     let users = JSON.parse(localStorage.getItem("users"));
-    if(users.some(user => user.name == userData.user && user.password == userData.password)){
+    if(users.some(user => user.name === userData.user && user.password === userData.password)){
       setCorrect(true);
-      let currentUser = {
-        user: userData.user,
-        password: userData.password
-      }
+      let usrIndex = users.findIndex(user => user.name == userData.user && user.password == userData.password)
+      let currentUser = users[usrIndex];
       localStorage.setItem("currentUser", JSON.stringify(currentUser))
       setInterval(() => {
         setCorrect(false)
@@ -64,6 +62,7 @@ function App() {
     }
   }
 
+
   return (
     <>
       <div className='flex flex-col h-screen items-center justify-center'>
@@ -77,7 +76,10 @@ function App() {
           {error == true ? <h2 className=' bg-red-600 text-white text-2xl text-center p-2 mt-2 rounded-xl'>Datos incorrectos</h2> : ""}
           {correct == true ? <h2 className=' bg-green-600 text-white text-2xl text-center p-2 mt-2 rounded-xl'>Datos correctos</h2> : ""}
         </form>
-        <a href="/signup" className='mt-3 rounded-full bg-slate-400 p-2 hover:scale-110 transition-all'>Crear cuenta</a>
+        <div className='flex flex-row justify-around w-96'>
+          <a href="/signup" className='mt-3 rounded-full bg-slate-400 p-2 hover:scale-110 transition-all'>Crear cuenta</a>
+          <a href="/guest" className='mt-3 rounded-full bg-slate-400 p-2 hover:scale-110 transition-all'>Cuenta Invitado</a>
+        </div>
       </div>
     </>
   )
