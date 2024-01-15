@@ -7,8 +7,8 @@ function Questions() {
     const [cantidad, setCantidad] = useState(0);
     const [cantidadDesp, setCantidadDesp] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [questionValue, setQuestionValue] = useState(null) ;
-
+    // const [questionValue, setQuestionValue] = useState(null) ;
+    const [preguntasObj, setPreguntasObj] = useState([]);
     function randomizarArrayHasta(arrayOriginal, numeroPosiciones) {
         const arrayResultante = [...arrayOriginal]; // Copia el array original para no modificarlo directamente
 
@@ -37,24 +37,37 @@ function Questions() {
         setCantidad(value);
     }
 
+    // const handleChangeQuestion = (event) => {
+    //     event.preventDefault();
+
+    // }
+
 
     const handleDesp = (event) => {
         event.preventDefault();
         setCantidadDesp(!cantidadDesp)
         // logica hacer las preguntas
-        
+        console.log("selector de cantidad cerrado")
         let preguntas = randomizarArrayHasta(preguntasPreRandom, cantidad)
-        preguntasObj = preguntas.map((e) => {
+        let preg = preguntas.map((e) => 
+        {
+            console.log("objeto" + e);
+            console.log(e.options);
+            return  (<QuestionCard key={e.id} questionText={e.question} answers={e.options} val={e.id} /> )
+        }
+        )
 
-        })
-
-        
+        setPreguntasObj(preg);
     }
 
     return (
         <>
             <Navbar />
             <div className={`${cantidadDesp ? "hidden" : "block"}`}>
+                <div className="flex flex-row mt-4 justify-around">
+                    <button onClick={()=> setCurrentQuestion(currentQuestion - 1)} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Anterior</button>
+                    <button onClick={()=> setCurrentQuestion(currentQuestion + 1)} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Siguiente</button>
+                </div>
                 {preguntasObj[currentQuestion]}
             </div>
             <div className={`flex flex-col bg-slate-400 w-72 p-4 rounded-xl ${cantidadDesp ? "block" : "hidden"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`} id="elegir-cantidad">

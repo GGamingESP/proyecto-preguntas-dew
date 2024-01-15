@@ -40,7 +40,8 @@ function Signup() {
                     name: userData.user,
                     password: userData.password,
                     favQuestions : [], // ids de las preguntas favoritas
-                    avgScore: [] // hacer division entre cantidad de notas para sacar el promedio
+                    avgScore: [], // hacer division entre cantidad de notas para sacar el promedio
+                    madeQuestions : [] // preguntas hechas por el usuario
                 }
                 oldValues.push(newUser);
                 localStorage.setItem("users", JSON.stringify(oldValues));
