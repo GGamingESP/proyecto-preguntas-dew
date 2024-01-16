@@ -119,7 +119,7 @@ function Mydata() {
         let user = JSON.parse(localStorage.getItem("currentUser"));
         if(user.madeQuestions){
             setMyQuestions(user.madeQuestions);
-            let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} />)
+            let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
             setQuestions(preg);
             console.log(user.madeQuestions)
         }
