@@ -69,9 +69,9 @@ function Mydata() {
         let user = JSON.parse(localStorage.getItem("currentUser"));
         let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
         setQuestions(preg);
-        setMyQuestions([...madeQuestions]);
-        console.log(myQuestions)
-        location.reload();
+        setMyQuestions([...madeQuestions], () => {console.log(myQuestions)});
+        // console.log(myQuestions)
+        // location.reload();
     };
 
     const handleMyQuestionsDesp = (event) => {
@@ -81,47 +81,42 @@ function Mydata() {
 
     const deleteQuestion = (id) => {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        console.log(currentUser)
-        console.log("ID de la pregunta a eliminar: " +  id)
-        // console.log("preguntas hechas por el usuario" + currentUser.madeQuestions)
+        console.log(currentUser);
+        console.log("ID de la pregunta a eliminar: " + id);
         console.log(myQuestions);
-        let oldQuestionID = id ;
-
-        let updatedQuestions = myQuestions.filter((pregunta) => pregunta.id !== oldQuestionID );
-
-        setMyQuestions([...updatedQuestions]);
-
-        console.log(myQuestions);
-
-        
-
-        
-        let changesMade = {
-            ...currentUser,
-            madeQuestions: updatedQuestions,
-        };
-
-        
-        localStorage.setItem("currentUser", JSON.stringify(changesMade));
-
-        // Update other users in localStorage
-        let allUsers = JSON.parse(localStorage.getItem("users"));
-        let allUsersLess = allUsers.filter((user) => user.name != changesMade.name);
-        localStorage.setItem("users", JSON.stringify(allUsersLess));
-
-        // Update the component state with the updated questions
-        let preg = updatedQuestions.map((e, index) => (
-            <MyQuestionCard
-                key={index}
-                id={e.id}
-                questionText={e.question}
-                options={e.options}
-                correctAnswer={e.correctAnswer}
-                handler={() => deleteQuestion(e.id)}
-            />
-        ));
-        setQuestions(preg);
-        location.reload();
+    
+        setMyQuestions(prevQuestions => {
+            let updatedQuestions = prevQuestions.filter((pregunta) => pregunta.id !== id);
+    
+            console.log(updatedQuestions);
+    
+            let changesMade = {
+                ...currentUser,
+                madeQuestions: updatedQuestions,
+            };
+    
+            localStorage.setItem("currentUser", JSON.stringify(changesMade));
+    
+            // Update other users in localStorage
+            let allUsers = JSON.parse(localStorage.getItem("users"));
+            let allUsersLess = allUsers.filter((user) => user.name !== changesMade.name);
+            localStorage.setItem("users", JSON.stringify(allUsersLess));
+    
+            // Update the component state with the updated questions
+            let preg = updatedQuestions.map((e, index) => (
+                <MyQuestionCard
+                    key={index}
+                    id={e.id}
+                    questionText={e.question}
+                    options={e.options}
+                    correctAnswer={e.correctAnswer}
+                    handler={() => deleteQuestion(e.id)}
+                />
+            ));
+            setQuestions(preg);
+    
+            return [...updatedQuestions]; // Devolver el nuevo estado
+        });
     };
 
     const handleMyQuestionTick = (event) => {
