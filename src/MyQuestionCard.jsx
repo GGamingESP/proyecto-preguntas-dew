@@ -2,7 +2,7 @@
 
 function MyQuestionCard({id, questionText, options, correctAnswer, handler}) {
 
-    console.log(correctAnswer)
+    // console.log(correctAnswer)
     let resp = options.map((e, index) => 
         <li key={index} className={`rounded-lg p-1 m-1 ${index + 1 == correctAnswer ? "bg-green-300" : " bg-red-500"}`}>{e}</li>
     )
@@ -11,7 +11,7 @@ function MyQuestionCard({id, questionText, options, correctAnswer, handler}) {
         event.preventDefault();
         //logica
         console.log("intentando eliminar pregunta");
-        handler()   
+        handler(id)   
     }
 
     return (
@@ -19,7 +19,7 @@ function MyQuestionCard({id, questionText, options, correctAnswer, handler}) {
             <div>
                 <div className="flex flex-row">
                     <h3>{questionText}</h3>
-                    <button onClick={handleDelete} className="p-1 bg-slate-500 text-white font-bold ms-2 rounded-lg text-center hover:scale-105 transition-all"     >X</button>
+                    <button onClick={handleDelete} className="p-1 bg-slate-500 text-white font-bold ms-2 rounded-lg text-center hover:scale-105 transition-all right-1">X</button>
                 </div>  
                 <ul className="">
                     {resp}

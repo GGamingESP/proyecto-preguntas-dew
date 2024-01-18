@@ -5,8 +5,10 @@ import { useEffect, useState } from 'react'
 
 function Mydata() {
 
+    let usr = JSON.parse(localStorage.getItem("currentUser"))
+
     const [myQuestionsDesp, setMyQuestionsDesp] = useState(false);
-    const [myQuestions, setMyQuestions] = useState([]);
+    const [myQuestions, setMyQuestions] = useState([...usr.madeQuestions]);
     const [questions, setQuestions] = useState([]);
     const [tick, setCurrenTick] = useState({
         id: "",
@@ -65,8 +67,11 @@ function Mydata() {
         localStorage.setItem("users", JSON.stringify(allUsersLess));
         console.log(questionData);
         let user = JSON.parse(localStorage.getItem("currentUser"));
-        let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} />)
+        let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
         setQuestions(preg);
+        setMyQuestions([...madeQuestions]);
+        console.log(myQuestions)
+        location.reload();
     };
 
     const handleMyQuestionsDesp = (event) => {
@@ -75,23 +80,48 @@ function Mydata() {
     }
 
     const deleteQuestion = (id) => {
-        setMyQuestions((prevPreguntas) => prevPreguntas.filter((pregunta) => pregunta.id !== id));
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        console.log(currentUser)
+        console.log("ID de la pregunta a eliminar: " +  id)
+        // console.log("preguntas hechas por el usuario" + currentUser.madeQuestions)
+        console.log(myQuestions);
+        let oldQuestionID = id ;
+
+        let updatedQuestions = myQuestions.filter((pregunta) => pregunta.id !== oldQuestionID );
+
+        setMyQuestions([...updatedQuestions]);
+
+        console.log(myQuestions);
+
+        
+
+        
         let changesMade = {
             ...currentUser,
-            madeQuestions: myQuestions
+            madeQuestions: updatedQuestions,
         };
-        localStorage.removeItem("currentUser");
-        localStorage.setItem("currentUser", JSON.stringify(changesMade));
-        let allUsers = JSON.parse(localStorage.getItem("users"));
-        let allUsersLess = allUsers.filter((user) => user.name != changesMade.name)
-        allUsersLess.push(changesMade)
-        localStorage.removeItem("users");
-        localStorage.setItem("users", JSON.stringify(allUsersLess));
+
         
-        let user = JSON.parse(localStorage.getItem("currentUser"));
-        let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} />)
+        localStorage.setItem("currentUser", JSON.stringify(changesMade));
+
+        // Update other users in localStorage
+        let allUsers = JSON.parse(localStorage.getItem("users"));
+        let allUsersLess = allUsers.filter((user) => user.name != changesMade.name);
+        localStorage.setItem("users", JSON.stringify(allUsersLess));
+
+        // Update the component state with the updated questions
+        let preg = updatedQuestions.map((e, index) => (
+            <MyQuestionCard
+                key={index}
+                id={e.id}
+                questionText={e.question}
+                options={e.options}
+                correctAnswer={e.correctAnswer}
+                handler={() => deleteQuestion(e.id)}
+            />
+        ));
         setQuestions(preg);
+        location.reload();
     };
 
     const handleMyQuestionTick = (event) => {
@@ -110,19 +140,25 @@ function Mydata() {
             let question = questionData
             question.correctAnswer = parseInt(tickIDNumber)
             setQuestionData(question) 
-            console.log(questionData)
+            // console.log(questionData)
         }
     }
+    
 
     useEffect(() => {
         // funciones para cargar los datos al principio
         let user = JSON.parse(localStorage.getItem("currentUser"));
         if(user.madeQuestions){
-            setMyQuestions(user.madeQuestions);
+            // setMyQuestions(user.madeQuestions)
             let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
             setQuestions(preg);
             console.log(user.madeQuestions)
+            setMyQuestions([...user.madeQuestions])
+            console.log(myQuestions); 
         }
+        // console.log(myQuestions);
+        // setMyQuestions(...user.madeQuestions)
+        // console.log(myQuestions);
     }, []);
 
 
