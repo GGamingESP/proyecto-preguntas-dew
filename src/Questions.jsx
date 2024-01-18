@@ -4,7 +4,7 @@ import QuestionCard from "./QuestionCard";
 
 function Questions() {
 
-    const [cantidad, setCantidad] = useState(0);
+    const [cantidad, setCantidad] = useState(10);
     const [cantidadDesp, setCantidadDesp] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     // const [questionValue, setQuestionValue] = useState(null) ;
@@ -27,8 +27,8 @@ function Questions() {
 
         let value = parseInt(event.target.value, 10); // Convertir el valor a un número entero
 
-        if (value < 0 || isNaN(value)) { // Verificar si el valor es negativo o no es un número
-          value = 0; // Si es negativo o no es un número, establecer el valor en 0
+        if (value < 10 || isNaN(value)) { // Verificar si el valor es negativo o no es un número
+          value = 10; // Si es negativo o no es un número, establecer el valor en 0
         }
         if(value > 25 || isNaN(value)) {
             value = 25 ;
@@ -60,13 +60,34 @@ function Questions() {
         setPreguntasObj(preg);
     }
 
+    const handleMoveQuestion = (move) => {
+        switch(move) {
+            case '+' :
+                let nextQuestion = currentQuestion + 1 ;
+                if(nextQuestion > cantidad){
+                    // cosas para pasar a ultima pregunta
+                }else {
+                    setCurrentQuestion(currentQuestion + 1)
+                }
+            break;
+
+            case '-':
+                let previousQuestion = currentQuestion - 1 ;
+                if(previousQuestion < 0){
+                    // no hacer nada
+                }else {
+                    setCurrentQuestion(currentQuestion - 1)
+                }
+        }
+    }
+
     return (
         <>
             <Navbar />
             <div className={`${cantidadDesp ? "hidden" : "block"}`}>
                 <div className="flex flex-row mt-4 justify-around">
-                    <button onClick={()=> setCurrentQuestion(currentQuestion - 1)} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Anterior</button>
-                    <button onClick={()=> setCurrentQuestion(currentQuestion + 1)} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Siguiente</button>
+                    <button onClick={()=> handleMoveQuestion("-")} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Anterior</button>
+                    <button onClick={()=> handleMoveQuestion("+")} className="p-2 bg-slate-500 text-white rounded-xl hover:scale-110 transition-all">Siguiente</button>
                 </div>
                 {preguntasObj[currentQuestion]}
             </div>

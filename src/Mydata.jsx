@@ -100,6 +100,7 @@ function Mydata() {
             // Update other users in localStorage
             let allUsers = JSON.parse(localStorage.getItem("users"));
             let allUsersLess = allUsers.filter((user) => user.name !== changesMade.name);
+            allUsersLess.push(changesMade)
             localStorage.setItem("users", JSON.stringify(allUsersLess));
     
             // Update the component state with the updated questions
@@ -181,6 +182,10 @@ function Mydata() {
                             <button className='bg-slate-500 p-2 rounded mx-auto mt-4 text-white cursor-pointer hover:scale-105 transition-all' onClick={handleNewQuestion}>Crear Pregunta</button>
                         </form>
                     </div>
+                </div>
+                <div>
+                    <h2 className='text-white text-3xl mt-4 ms-8'>Mi puntuacion promedio</h2>
+                    <p className='text-white text-2xl mt-3 ms-8'>{Number.isNaN(usr.avgScore) ? usr.avgScore.reduce((acumulador, numero) => acumulador + numero, 0) / usr.avgScore.length : "Todavia no has hecho ningun examen"}</p>
                 </div>
             </div>
         </>

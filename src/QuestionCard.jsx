@@ -2,7 +2,14 @@ import { useState } from "react"
 
 function QuestionCard({questionText, answers, val}) {
     // questionText, questions, correctAnswer, id, currentState (parametro de entrada)
-    const [favourite, setFavourite] = useState(false)
+    let usr = JSON.parse(localStorage.getItem("currentUser"));
+    let favOrNot ;
+    if(usr.favQuestions.includes(val)){
+        favOrNot = true ;
+    }else {
+        favOrNot = false
+    }
+    const [favourite, setFavourite] = useState(favOrNot)
 
     const handleFav = (event) => {
         event.preventDefault();
@@ -56,8 +63,8 @@ function QuestionCard({questionText, answers, val}) {
                 <h2 className="text-center text-xl mx-auto">{questionText}</h2>
                 <button onClick={handleFav} className={`${favourite ? 'text-yellow-400' : 'text-white'}`}>{favourite ? String.fromCharCode(9733) : String.fromCharCode(9734)}</button>
             </div>
-            <div className=" h-[90%] ps-1">
-            {answers.map((e, index) => <button key={index} className={`w-[49%] h-[49%] m-1 rounded-md text-white p-1 bg-slate-500 hover:scale-105 transition-all`}>{e}</button>)}
+            <div className="h-[90%] ps-1 grid grid-cols-2">
+            {answers.map((e, index) => <button key={index} className={`m-1 rounded-md p-1 text-white bg-slate-500 hover:scale-105 transition-all`}>{e}</button>)}
             </div>
         </div>
     )
