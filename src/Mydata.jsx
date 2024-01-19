@@ -1,10 +1,11 @@
 import './App.css'
 import MyQuestionCard from './MyQuestionCard';
 import Navbar from './Navbar'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import MyDataContext from './Mydatacontext';
 
 function Mydata() {
-
+    const MyDataProvider = MyDataContext.Provider;
     let usr = JSON.parse(localStorage.getItem("currentUser"))
 
     const [myQuestionsDesp, setMyQuestionsDesp] = useState(false);
