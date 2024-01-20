@@ -1,11 +1,10 @@
 import './App.css'
 import MyQuestionCard from './MyQuestionCard';
 import Navbar from './Navbar'
-import { useEffect, useState, useContext } from 'react'
-import MyDataContext from './Mydatacontext';
+import { useEffect, useState } from 'react';
+import MyDataContext from './MyDataContext';
 
 function Mydata() {
-    const MyDataProvider = MyDataContext.Provider;
     let usr = JSON.parse(localStorage.getItem("currentUser"))
 
     const [myQuestionsDesp, setMyQuestionsDesp] = useState(false);
@@ -23,6 +22,8 @@ function Mydata() {
         respuesta4: '',
         correctAnswer: null,
     }) 
+
+    const MyDataProvider = MyDataContext.Provider;
 
     const handleChangeNewQuestion = (event) => {
         event.preventDefault();
@@ -68,7 +69,7 @@ function Mydata() {
         localStorage.setItem("users", JSON.stringify(allUsersLess));
         console.log(questionData);
         let user = JSON.parse(localStorage.getItem("currentUser"));
-        let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
+        let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} handler={() => deleteQuestion(e.id)} />)
         setQuestions(preg);
         setMyQuestions([...madeQuestions], () => {console.log(myQuestions)});
         // console.log(myQuestions)
@@ -109,9 +110,6 @@ function Mydata() {
                 <MyQuestionCard
                     key={index}
                     id={e.id}
-                    questionText={e.question}
-                    options={e.options}
-                    correctAnswer={e.correctAnswer}
                     handler={() => deleteQuestion(e.id)}
                 />
             ));
@@ -147,7 +145,7 @@ function Mydata() {
         let user = JSON.parse(localStorage.getItem("currentUser"));
         if(user.madeQuestions){
             // setMyQuestions(user.madeQuestions)
-            let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} questionText={e.question} options={e.options} correctAnswer={e.correctAnswer} handler={() => deleteQuestion(e.id)} />)
+            let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} handler={() => deleteQuestion(e.id)} />)
             setQuestions(preg);
             console.log(user.madeQuestions)
             setMyQuestions([...user.madeQuestions])
@@ -166,7 +164,9 @@ function Mydata() {
                 <div>
                     <h2 className='text-white text-3xl mt-4 ms-8'>Mis preguntas</h2>
                     <ul className='flex flex-row mt-2 ms-8'>
-                        {questions}
+                        <MyDataProvider value={myQuestions}>
+                            {questions}
+                        </MyDataProvider>
                     </ul>
                     <button className=' p-2 bg-slate-400 text-white rounded-xl mt-4 ms-8 hover:scale-105 transition-all' onClick={handleMyQuestionsDesp}>Añadir Pregunta</button>
                     <div className={`flex flex-col bg-slate-400 w-72 p-4 rounded-xl ${myQuestionsDesp ? "block" : "hidden"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}>
