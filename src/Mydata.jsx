@@ -1,19 +1,19 @@
 import './App.css'
 import MyQuestionCard from './MyQuestionCard';
 import Navbar from './Navbar'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import MyDataContext from './MyDataContext';
 
 function Mydata() {
     let usr = JSON.parse(localStorage.getItem("currentUser"))
 
-    const [myQuestionsDesp, setMyQuestionsDesp] = useState(false);
-    const [myQuestions, setMyQuestions] = useState([...usr.madeQuestions]);
-    const [questions, setQuestions] = useState([]);
+    const [myQuestionsDesp, setMyQuestionsDesp] = useState(false); // desplegable de hacer preguntas
+    const [myQuestions, setMyQuestions] = useState([...usr.madeQuestions]); // preguntas del usuario
+    const [questions, setQuestions] = useState([]); // array de card de preguntas
     const [tick, setCurrenTick] = useState({
         id: "",
         position: ""
-    });
+    }); // tick para saber que pregunta es la correcta cuando creas una pregunta
     const [questionData, setQuestionData] = useState({
         question: '',
         respuesta1: '',
@@ -21,9 +21,20 @@ function Mydata() {
         respuesta3: '',
         respuesta4: '',
         correctAnswer: null,
-    }) 
+    }) // datos para las preguntas
 
-    const MyDataProvider = MyDataContext.Provider;
+    const MyDataProvider = MyDataContext.Provider; // useContext
+
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "NEW":
+                break;
+            case "DELETE":
+                break;
+            default:
+                return "Accion incorrecta";
+        }
+    }
 
     const handleChangeNewQuestion = (event) => {
         event.preventDefault();
