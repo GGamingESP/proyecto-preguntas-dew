@@ -28,13 +28,15 @@ function Mydata() {
     const reducer = (state, action) => {
         switch (action.type) {
             case "NEW":
-                break;
+                return action.questions
             case "DELETE":
                 break;
             default:
-                return "Accion incorrecta";
+                return state;
         }
     }
+
+    const [myQuestionsReduced, dispatch] = useReducer(reducer, [...usr.madeQuestions]) ;
 
     const handleChangeNewQuestion = (event) => {
         event.preventDefault();
@@ -83,6 +85,7 @@ function Mydata() {
         let preg = user.madeQuestions.map((e, index) => <MyQuestionCard key={index} id={e.id} handler={() => deleteQuestion(e.id)} />)
         setQuestions(preg);
         setMyQuestions([...madeQuestions], () => {console.log(myQuestions)});
+        dispatch({type: "NEW", questions: madeQuestions})
         // console.log(myQuestions)
         // location.reload();
     };
@@ -175,7 +178,7 @@ function Mydata() {
                 <div>
                     <h2 className='text-white text-3xl mt-4 ms-8'>Mis preguntas</h2>
                     <ul className='flex flex-row mt-2 ms-8'>
-                        <MyDataProvider value={myQuestions}>
+                        <MyDataProvider value={myQuestionsReduced}>
                             {questions}
                         </MyDataProvider>
                     </ul>
